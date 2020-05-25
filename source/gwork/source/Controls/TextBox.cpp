@@ -373,6 +373,7 @@ void TextBox::EraseSelection()
 void TextBox::Focus()
 {
     Label::Focus();
+    RefreshCursorBounds();
     MakeCaretVisible();
     m_caretFlashOn = true;
 }

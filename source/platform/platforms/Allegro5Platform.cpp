@@ -55,7 +55,8 @@ void Gwk::Platform::DefaultLogListener(Gwk::Log::Level lvl, const char *message)
     // TODO: al_open_native_text_log() ??
 
 #if defined(_MSC_VER)
-    OutputDebugString(message);
+    //OutputDebugString(message);
+    printf(message);
 #else
     if (lvl >= Gwk::Log::Level::Error)
         fputs(message, stderr);

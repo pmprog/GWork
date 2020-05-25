@@ -87,6 +87,8 @@ namespace Gwk
             virtual void MoveCaretToEnd();
             virtual void MoveCaretToStart();
 
+            void Focus() override;
+
             Event::Listener onTextChanged;
             Event::Listener onReturnPressed;
 
@@ -113,7 +115,8 @@ namespace Gwk
             Gwk::Rect m_rectCaretBounds;
 
             float m_fNextCaretColorChange;
-            Gwk::Color m_caretColor;
+            //Gwk::Color m_caretColor;
+            bool m_caretFlashOn;
         };
 
 

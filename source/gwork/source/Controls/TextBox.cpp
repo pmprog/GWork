@@ -108,13 +108,16 @@ void TextBox::UpdateCaretColor()
         m_fNextCaretColorChange = Gwk::Platform::GetTimeInSeconds()+0.5f; return;
     }
 
+    /*
     Gwk::Color targetcolor = Gwk::Color(230, 230, 230, 255);
 
     if (m_caretColor == targetcolor)
         targetcolor = Gwk::Color(20, 20, 20, 255);
+    */
+    m_caretFlashOn = !m_caretFlashOn;
 
     m_fNextCaretColorChange = Gwk::Platform::GetTimeInSeconds()+0.5f;
-    m_caretColor = targetcolor;
+    //m_caretColor = targetcolor;
     Redraw();
 }
 
@@ -136,14 +139,18 @@ void TextBox::Render(Skin::Base* skin)
     }
 
     // Draw caret
-    skin->GetRender()->SetDrawColor(m_caretColor);
-    skin->GetRender()->DrawFilledRect(m_rectCaretBounds);
+    if(m_caretFlashOn)
+    {
+        skin->GetRender()->SetDrawColor(this->m_text->TextColor());
+        skin->GetRender()->DrawFilledRect(m_rectCaretBounds);
+    }
 }
 
 void TextBox::RefreshCursorBounds()
 {
     m_fNextCaretColorChange = Gwk::Platform::GetTimeInSeconds()+1.5f;
-    m_caretColor = GetSkin()->Colors.Label.Bright;
+    //m_caretColor = GetSkin()->Colors.Label.Bright;
+    m_caretFlashOn = true;
     MakeCaretVisible();
     Gwk::Rect pA = GetCharacterPosition(m_cursorPos);
     Gwk::Rect pB = GetCharacterPosition(m_cursorEnd);
@@ -363,6 +370,13 @@ void TextBox::EraseSelection()
     m_cursorEnd = iStart;
 }
 
+void TextBox::Focus()
+{
+    Label::Focus();
+    MakeCaretVisible();
+    m_caretFlashOn = true;
+}
+
 void TextBox::OnMouseClickLeft(int x, int y, bool bDown)
 {
     if (m_bSelectAll)
@@ -572,8 +586,9 @@ void TextBoxMultiline::Render(Skin::Base* skin)
     }
 
     // Draw caret
-    skin->GetRender()->SetDrawColor(m_caretColor);
-    skin->GetRender()->DrawFilledRect(m_rectCaretBounds);
+    //skin->GetRender()->SetDrawColor(m_caretColor);
+    //skin->GetRender()->DrawFilledRect(m_rectCaretBounds);
+    Redraw();
 }
 
 void TextBoxMultiline::MakeCaretVisible()
